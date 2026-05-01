@@ -1,0 +1,74 @@
+# =============================================
+# Docker Compose Configuration
+# =============================================
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: crud-app-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: cruddb
+      MYSQL_USER: cruduser
+      MYSQL_PASSWORD: crudpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - crud-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # Spring Boot Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: crud-app
+    environment:
+      # Database Configuration
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/cruddb
+      SPRING_DATASOURCE_USERNAME: cruduser
+      SPRING_DATASOURCE_PASSWORD: crudpass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQLDialect
+      # Application Configuration
+      SERVER_PORT: 8080
+      SPRING_PROFILES_ACTIVE: prod
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - crud-network
+    restart: unless-stopped
+
+  # Optional: Jenkins for CI/CD
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: crud-jenkins
+    user: root
+    environment:
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
+    ports:
+      - "8081:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - crud-network
+
+volumes:
+  mysql_data:
+  jenkins_home:
+
+networks:
+  crud-network:
+    driver: bridge
