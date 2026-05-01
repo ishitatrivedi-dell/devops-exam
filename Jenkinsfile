@@ -12,6 +12,7 @@ pipeline {
     maven 'mvn-3'
     jdk 'jdk-21'
 }
+///hello form java
 
     stages {
         stage('Checkout') {
