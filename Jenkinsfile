@@ -8,11 +8,10 @@ pipeline {
         VERSION = "1.0.0-${BUILD_NUMBER}"
     }
 
-    tools {
-        // Configure Maven tool (must be configured in Jenkins Global Tool Configuration)
-        maven 'Maven-3.9'
-        jdk 'JDK-17'
-    }
+   tools {
+    maven 'mvn-3'
+    jdk 'jdk-21'
+}
 
     stages {
         stage('Checkout') {
