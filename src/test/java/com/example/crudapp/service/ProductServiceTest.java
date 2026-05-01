@@ -37,13 +37,12 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
-        testProduct = Product.builder()
-                .id(1L)
-                .name("Test Product")
-                .description("Test Description")
-                .price(new BigDecimal("99.99"))
-                .quantity(10)
-                .build();
+        testProduct = new Product();
+        testProduct.setId(1L);
+        testProduct.setName("Test Product");
+        testProduct.setDescription("Test Description");
+        testProduct.setPrice(new BigDecimal("99.99"));
+        testProduct.setQuantity(10);
     }
 
     @Test
@@ -61,13 +60,12 @@ class ProductServiceTest {
     @Test
     @DisplayName("Get All Products - Success")
     void getAllProducts_Success() {
-        Product product2 = Product.builder()
-                .id(2L)
-                .name("Second Product")
-                .description("Another Description")
-                .price(new BigDecimal("50.00"))
-                .quantity(5)
-                .build();
+        Product product2 = new Product();
+        product2.setId(2L);
+        product2.setName("Second Product");
+        product2.setDescription("Another Description");
+        product2.setPrice(new BigDecimal("50.00"));
+        product2.setQuantity(5);
 
         when(productRepository.findAll()).thenReturn(Arrays.asList(testProduct, product2));
 
@@ -103,12 +101,11 @@ class ProductServiceTest {
     @Test
     @DisplayName("Update Product - Success")
     void updateProduct_Success() {
-        Product updatedDetails = Product.builder()
-                .name("Updated Product")
-                .description("Updated Description")
-                .price(new BigDecimal("150.00"))
-                .quantity(20)
-                .build();
+        Product updatedDetails = new Product();
+        updatedDetails.setName("Updated Product");
+        updatedDetails.setDescription("Updated Description");
+        updatedDetails.setPrice(new BigDecimal("150.00"));
+        updatedDetails.setQuantity(20);
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(testProduct));
         when(productRepository.save(any(Product.class))).thenReturn(testProduct);
@@ -171,12 +168,11 @@ class ProductServiceTest {
     @Test
     @DisplayName("Get Total Inventory Value - Success")
     void getTotalInventoryValue_Success() {
-        Product product2 = Product.builder()
-                .id(2L)
-                .name("Second Product")
-                .price(new BigDecimal("50.00"))
-                .quantity(5)
-                .build();
+        Product product2 = new Product();
+        product2.setId(2L);
+        product2.setName("Second Product");
+        product2.setPrice(new BigDecimal("50.00"));
+        product2.setQuantity(5);
 
         when(productRepository.findAll()).thenReturn(Arrays.asList(testProduct, product2));
 

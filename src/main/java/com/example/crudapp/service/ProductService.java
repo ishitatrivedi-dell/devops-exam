@@ -3,8 +3,8 @@ package com.example.crudapp.service;
 import com.example.crudapp.entity.Product;
 import com.example.crudapp.exception.ResourceNotFoundException;
 import com.example.crudapp.repository.ProductRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,11 +16,15 @@ import java.util.List;
  * Implements CRUD operations and handles transaction management.
  */
 @Service
-@RequiredArgsConstructor
-@Slf4j
 public class ProductService {
 
+    private static final Logger log = LoggerFactory.getLogger(ProductService.class);
     private final ProductRepository productRepository;
+
+    // Constructor injection
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     /**
      * Create a new product.

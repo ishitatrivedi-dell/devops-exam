@@ -3,8 +3,8 @@ package com.example.crudapp.controller;
 import com.example.crudapp.entity.Product;
 import com.example.crudapp.service.ProductService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,12 +20,16 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/products")
-@RequiredArgsConstructor
-@Slf4j
 @CrossOrigin(origins = "*")
 public class ProductController {
 
+    private static final Logger log = LoggerFactory.getLogger(ProductController.class);
     private final ProductService productService;
+
+    // Constructor injection
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
 
     /**
      * Create a new product.
